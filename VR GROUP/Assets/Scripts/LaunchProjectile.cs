@@ -19,7 +19,7 @@ public class LaunchProjectile : MonoBehaviour
         GameObject projectile = Instantiate(projectilePrefab, launcherTip.position, launcherTip.rotation);
 
         // add a force to launch the projectile
-        projectile.GetComponent<Rigidbody>().AddForce(launcherTip.forward * launchForce);
+        projectile.GetComponent<Rigidbody>().AddForce(-launcherTip.forward * launchForce, ForceMode.Impulse);
 
         // start reload cooldown
         StartCoroutine(Reload());
