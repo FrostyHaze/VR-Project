@@ -1,94 +1,87 @@
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
+using TMPro;
+
+[System.Serializable]
+public class Question
+{
+    public string text;
+    public int correctAnswer; // Index of correct target
+}
 
 public class QuizManager : MonoBehaviour
 {
-    [System.Serializable]
-    public class Question
-    {
-        public string questionText;
-        public int correctAnswer; // From 1 to 8
-    }
-
-    public Question[] questions;
-    public Text questionTextUI;
-    public Text timerTextUI; 
-    public float questionTimeLimit = 20f;
+    public List<Question> questions = new List<Question>();
+    public TMP_Text questionText;
+    public float timeLimit = 20f;
 
     private int currentQuestionIndex = 0;
-    private float timeRemaining;
-    private bool timerRunning = false;
+    private float timer;
+    private bool quizActive = false;
 
-    private void Start()
+    void Start()
     {
         StartQuiz();
     }
 
-    public void StartQuiz()
+    void Update()
+    {
+        if (!quizActive) return;
+
+        timer -= Time.deltaTime;
+        if (timer <= 0f)
+        {
+            Debug.Log("Time's up!");
+            ResetQuiz();
+        }
+    }
+    public void BeginQuiz()
     {
         currentQuestionIndex = 0;
+        quizActive = true;
+        ShowQuestion();
+    }
+    void StartQuiz()
+    {
+        currentQuestionIndex = 0;
+        quizActive = true;
         ShowQuestion();
     }
 
-    public void ShowQuestion()
+    void ResetQuiz()
     {
-        if (currentQuestionIndex < questions.Length)
+        currentQuestionIndex = 0;
+        ShowQuestion();
+        timer = timeLimit;
+    }
+
+    void ShowQuestion()
+    {
+        if (currentQuestionIndex < questions.Count)
         {
-            questionTextUI.text = questions[currentQuestionIndex].questionText;
-            timeRemaining = questionTimeLimit;
-            timerRunning = true;
+            questionText.text = questions[currentQuestionIndex].text;
+            timer = timeLimit;
         }
         else
         {
-            questionTextUI.text = "Quiz Complete!";
-            timerTextUI.text = "";
-            timerRunning = false;
+            questionText.text = "Quiz Complete!";
+            quizActive = false;
         }
     }
 
-    private void Update()
+    public void HandleTargetShot(int selectedAnswer)
     {
-        if (timerRunning)
-        {
-            timeRemaining -= Time.deltaTime;
-            timerTextUI.text = "Time: " + Mathf.CeilToInt(timeRemaining).ToString();
+        if (!quizActive) return;
 
-            if (timeRemaining <= 0f)
-            {
-                ResetQuiz("Time's up!");
-            }
-        }
-    }
-
-    public void CheckAnswer(int numberShot)
-    {
-        if (!timerRunning) return;
-
-        if (questions[currentQuestionIndex].correctAnswer == numberShot)
+        if (selectedAnswer == questions[currentQuestionIndex].correctAnswer)
         {
             currentQuestionIndex++;
             ShowQuestion();
         }
         else
         {
-            ResetQuiz("Wrong answer!");
+            Debug.Log("Wrong answer, resetting...");
+            ResetQuiz();
         }
     }
-
-    private void ResetQuiz(string reason)
-    {
-        timerRunning = false;
-        questionTextUI.text = reason + " Restarting...";
-        timerTextUI.text = "";
-
-        StartCoroutine(RestartAfterDelay(2f));
-    }
-
-    private IEnumerator RestartAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        StartQuiz();
-    }
 }
-

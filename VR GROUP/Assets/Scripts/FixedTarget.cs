@@ -2,14 +2,17 @@ using UnityEngine;
 
 public class FixedTarget : MonoBehaviour
 {
-    public int numberOnTarget = 1; // Set this in Inspector (1 to 8)
+    public int answerIndex; // Set this in the Inspector for each target
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (other.CompareTag("Projectile"))
+        if (collision.gameObject.CompareTag("Bullet"))
         {
-            FindObjectOfType<QuizManager>().HandleTargetShot(numberOnTarget);
-            Destroy(other.gameObject); // Optional: remove bullet
+            QuizManager quizManager = FindObjectOfType<QuizManager>();
+            if (quizManager != null)
+            {
+                quizManager.HandleTargetShot(answerIndex);
+            }
         }
     }
 }
