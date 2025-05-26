@@ -1,28 +1,82 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class Projectile : MonoBehaviour
 {
-    public float speed = 10f;        // Speed of the projectile
-    public float lifetime = 5f;      // Destroy after 5 seconds
+    [Header("Settings")]
+    public float speed = 60f;
+    public float lifetime = 3f;
+    public string targetTag = "Target";
+    public LayerMask collisionLayers = ~0; // Detect all layers by default
 
-    private void Start()
+    [Header("Collision Detection")]
+    public float sphereCastRadius = 0.2f;
+    public bool showDebugTrail = true;
+    public Color debugColor = Color.red;
+
+    [Header("Effects")]
+    public GameObject hitEffectPrefab;
+
+    private Rigidbody rb;
+    private Vector3 previousPosition;
+
+    void Awake()
     {
-        Destroy(gameObject, lifetime); // Auto-destroy to avoid clutter
+        rb = GetComponent<Rigidbody>();
+        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
     }
 
-    private void Update()
+    void Start()
     {
-        // Move the projectile forward constantly
-        transform.Translate(Vector3.forward * speed * Time.deltaTime);
+        previousPosition = transform.position;
+        rb.linearVelocity = transform.forward * speed;
+        Destroy(gameObject, lifetime);
     }
 
-    private void OnTriggerEnter(Collider other)
+    void FixedUpdate()
     {
-        // Ignore collisions with the Player and other Projectiles
-        if (!other.CompareTag("Player") && !other.CompareTag("Projectile"))
+        if (showDebugTrail)
         {
-            // Destroy the projectile on any valid hit
-            Destroy(gameObject);
+            Debug.DrawLine(previousPosition, transform.position, debugColor, 1f);
+        }
+
+        CheckContinuousCollision();
+        previousPosition = transform.position;
+    }
+
+    void CheckContinuousCollision()
+    {
+        Vector3 direction = (transform.position - previousPosition).normalized;
+        float distance = Vector3.Distance(previousPosition, transform.position);
+
+        RaycastHit[] hits = Physics.SphereCastAll(
+            previousPosition,
+            sphereCastRadius,
+            direction,
+            distance,
+            collisionLayers
+        );
+
+        foreach (RaycastHit hit in hits)
+        {
+            Debug.Log("Hit: " + hit.collider.name);
+
+            if (hit.collider.CompareTag(targetTag))
+            {
+                FixedTarget target = hit.collider.GetComponent<FixedTarget>();
+                if (target != null)
+                {
+                    target.HandleHit(); // Adjust if it requires parameters
+                }
+
+                if (hitEffectPrefab != null)
+                {
+                    Instantiate(hitEffectPrefab, hit.point, Quaternion.identity);
+                }
+
+                Destroy(gameObject);
+                return;
+            }
         }
     }
 }
