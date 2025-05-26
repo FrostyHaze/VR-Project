@@ -3,8 +3,9 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class button : MonoBehaviour
 {
-    public string keyValue;                   // Set to "1"�"9" or "Del" in the Inspector
-    public keypadManager keypadManager;       // Drag your KeypadManager GameObject here in Inspector
+    public string keyValue;                   
+    public keypadManager keypadManager;
+    public AudioSource buttonSound;
 
     private UnityEngine.XR.Interaction.Toolkit.Interactables.XRBaseInteractable interactable;
 
@@ -19,6 +20,7 @@ public class button : MonoBehaviour
         if (keypadManager != null)
         {
             keypadManager.PressKey(keyValue);
+            buttonSound.Play();
         }
         else
         {

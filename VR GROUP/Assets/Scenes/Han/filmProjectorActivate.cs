@@ -9,6 +9,9 @@ public class filmProjectorActivate : MonoBehaviour
 
     public GameObject[] objectsToActivate;
 
+    public AudioSource projectorSound; 
+
+
     private void OnEnable()
     {
         socketInteractor.selectEntered.AddListener(OnFilmInserted);
@@ -28,6 +31,7 @@ public class filmProjectorActivate : MonoBehaviour
             foreach (GameObject obj in objectsToActivate)
             {
                 obj.SetActive(true);
+                projectorSound.Play();
             }
         }
     }
@@ -39,6 +43,7 @@ public class filmProjectorActivate : MonoBehaviour
             foreach (GameObject obj in objectsToActivate)
             {
                 obj.SetActive(false);
+                projectorSound.Stop();
             }
         }
     }

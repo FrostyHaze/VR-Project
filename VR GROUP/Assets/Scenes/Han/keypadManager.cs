@@ -6,6 +6,7 @@ public class keypadManager : MonoBehaviour
 {
     public TextMeshPro displayText;   // Assign in Inspector
     public string correctCode = "428"; // Set your password here
+    public AudioSource doorSound;
 
     [Header("Events")]
     public UnityEvent onCorrectCode;
@@ -41,6 +42,8 @@ public class keypadManager : MonoBehaviour
         {
             Debug.Log("Correct Code Entered!");
             onCorrectCode.Invoke();
+            doorSound.Play();
+
         }
         else
         {
