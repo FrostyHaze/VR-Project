@@ -1,37 +1,48 @@
-// VR Unity: Cabinet Door rotates once then locks, global 30s cooldown for all lockers
-
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
-[RequireComponent(typeof(UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable), typeof(Rigidbody))]
+[RequireComponent(typeof(UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable), typeof(Rigidbody), typeof(AudioSource))]
 public class CabinetDoorInteraction : MonoBehaviour
 {
+    [Header("Door Settings")]
+    [Tooltip("The Transform of the door leaf to rotate")]
     [SerializeField] private Transform doorTransform;
+    [Tooltip("Local Y-angle to open to (e.g. 90 or 270)")]
     [SerializeField] private float openAngle = 270f;
+    [Tooltip("Speed of the opening animation")]
     [SerializeField] private float animationSpeed = 5f;
+    [Tooltip("Cooldown (s) before any door can be reopened")]
     [SerializeField] private float cooldownSeconds = 30f;
 
+    [Header("Audio Settings")]
+    [Tooltip("Door‐opening sound clip (3D)")]
+    [SerializeField] private AudioClip openSfx;
+
     private UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable doorGrab;
+    private AudioSource audioSource;
     private bool hasRotated = false;
     private bool isAnimating = false;
 
-    // Static variables to enforce global cooldown across all lockers
+    // Static for a global cooldown across all doors
     private static float lastOpenTime = -Mathf.Infinity;
- 
+
     void Awake()
     {
+        // Grab and Rigidbody setup
         doorGrab = GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable>();
-
-        // Prevent positional movement and rotation by controller
         doorGrab.trackPosition = false;
         doorGrab.trackRotation = false;
-
-        // Disable physics movement
-        Rigidbody rb = GetComponent<Rigidbody>();
-        rb.isKinematic = true;
+        GetComponent<Rigidbody>().isKinematic = true;
 
         // Subscribe to grab event
         doorGrab.selectEntered.AddListener(OnDoorGrabbed);
+
+        // AudioSource setup
+        audioSource = GetComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+        audioSource.spatialBlend = 1f;      // fully 3D
+        audioSource.minDistance = 0.5f;
+        audioSource.maxDistance = 5f;
     }
 
     void OnDestroy()
@@ -41,32 +52,36 @@ public class CabinetDoorInteraction : MonoBehaviour
 
     void Update()
     {
-        if (isAnimating)
-        {
-            float target = openAngle;
-            Vector3 current = doorTransform.localEulerAngles;
-            float y = Mathf.LerpAngle(current.y, target, Time.deltaTime * animationSpeed);
-            doorTransform.localEulerAngles = new Vector3(current.x, y, current.z);
+        if (!isAnimating) return;
 
-            if (Mathf.Abs(Mathf.DeltaAngle(y, target)) < 0.1f)
-                isAnimating = false;
-        }
+        // Smoothly rotate Y toward openAngle
+        Vector3 current = doorTransform.localEulerAngles;
+        float y = Mathf.LerpAngle(current.y, openAngle, Time.deltaTime * animationSpeed);
+        doorTransform.localEulerAngles = new Vector3(current.x, y, current.z);
+
+        // Stop when close enough
+        if (Mathf.Abs(Mathf.DeltaAngle(y, openAngle)) < 0.1f)
+            isAnimating = false;
     }
 
     private void OnDoorGrabbed(SelectEnterEventArgs args)
     {
-        // Check individual usage and global cooldown
+        // Already opened or still on cooldown?
         if (hasRotated) return;
         if (Time.time < lastOpenTime + cooldownSeconds) return;
 
-        // Start animation to openAngle
+        // Play the door‐open SFX
+        if (openSfx != null)
+            audioSource.PlayOneShot(openSfx);
+
+        // Begin opening animation
         hasRotated = true;
         isAnimating = true;
 
-        // Set global cooldown
+        // Start global cooldown
         lastOpenTime = Time.time;
 
-        // Disable further grabs for this door
+        // Prevent further grabs
         doorGrab.enabled = false;
     }
 }
