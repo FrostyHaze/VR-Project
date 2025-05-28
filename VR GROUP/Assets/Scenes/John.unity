@@ -502,10 +502,9 @@ MonoBehaviour:
     correctAnswer: 7
   - text: How many even numbers are there from 1 to 8?
     correctAnswer: 4
-  - text: "I am a number between 3 and 8 that, when written in English, does not
-      contain the letter \u2018E\u2019. What am I?"
+  - text: I am a square number between 1 and 10, what number am I?
     correctAnswer: 4
-  - text: How many colors are in  a rainbow
+  - text: How many colors are in a rainbow
     correctAnswer: 7
   - text: I have no enemies
     correctAnswer: 0
@@ -5781,6 +5780,9 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 75349743}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 181760, guid: c677951fca1cd564ca61a386e6b5f2fe, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1492271959}
     - targetCorrespondingSourceObject: {fileID: 143816, guid: c677951fca1cd564ca61a386e6b5f2fe, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1179580933}
@@ -5841,6 +5843,108 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 404808, guid: c677951fca1cd564ca61a386e6b5f2fe, type: 3}
   m_PrefabInstance: {fileID: 1492271956}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1492271958 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 181760, guid: c677951fca1cd564ca61a386e6b5f2fe, type: 3}
+  m_PrefabInstance: {fileID: 1492271956}
+  m_PrefabAsset: {fileID: 0}
+--- !u!82 &1492271959
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1492271958}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: e484c37517b80ba428f7b3ab48493ce9, type: 3}
+  m_Resource: {fileID: 8300000, guid: e484c37517b80ba428f7b3ab48493ce9, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 0.25
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!4 &1495892843 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 467166, guid: 4351ac42f1bd4404ba00bc950e6ff913, type: 3}
