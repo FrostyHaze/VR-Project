@@ -90,7 +90,7 @@ public class QuizManager : MonoBehaviour
 
     void EndQuiz()
     {
-        questionText.text = "Quiz Complete!";
+        questionText.text = "Game Complete! Please Head out the Door";
         if (timerText != null) timerText.text = "";
         quizActive = false;
     }

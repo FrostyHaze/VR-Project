@@ -28,7 +28,7 @@ public class FixedTarget : MonoBehaviour
         targetRenderer = GetComponent<Renderer>();
         originalMaterial = targetRenderer.material;
 
-        // Get or add the AudioSource
+        
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
         {
