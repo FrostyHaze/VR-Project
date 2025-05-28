@@ -23,8 +23,8 @@ public class QuizManager : MonoBehaviour
     private float currentTime;
     private bool quizActive = false;
 
-   
-    public Animator doorAnimator;
+
+    public SimpleDoorOpener doorOpener;
 
     void Start()
     {
@@ -97,9 +97,9 @@ public class QuizManager : MonoBehaviour
         if (timerText != null) timerText.text = "";
         quizActive = false;
 
-        if (doorAnimator != null)
+        if (doorOpener != null)
         {
-            doorAnimator.SetTrigger("OpenDoor");
+            doorOpener.OpenDoor();
         }
     }
 
