@@ -23,6 +23,9 @@ public class QuizManager : MonoBehaviour
     private float currentTime;
     private bool quizActive = false;
 
+   
+    public Animator doorAnimator;
+
     void Start()
     {
         StartQuiz();
@@ -93,6 +96,11 @@ public class QuizManager : MonoBehaviour
         questionText.text = "Game Complete! Please Head out the Door";
         if (timerText != null) timerText.text = "";
         quizActive = false;
+
+        if (doorAnimator != null)
+        {
+            doorAnimator.SetTrigger("OpenDoor");
+        }
     }
 
     public bool HandleTargetShot(int selectedAnswer)
@@ -140,8 +148,10 @@ public class QuizManager : MonoBehaviour
         return isCorrect;
     }
 
+   
 
-public int GetCurrentCorrectAnswerIndex()
+
+    public int GetCurrentCorrectAnswerIndex()
     {
         if (currentQuestionIndex < questions.Count)
         {
