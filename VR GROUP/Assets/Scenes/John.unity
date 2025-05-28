@@ -502,7 +502,7 @@ MonoBehaviour:
     correctAnswer: 7
   - text: How many even numbers are there from 1 to 8?
     correctAnswer: 4
-  - text: "I am a number between 1 and 8 that, when written in English, does not
+  - text: "I am a number between 3 and 8 that, when written in English, does not
       contain the letter \u2018E\u2019. What am I?"
     correctAnswer: 4
   - text: How many colors are in  a rainbow
